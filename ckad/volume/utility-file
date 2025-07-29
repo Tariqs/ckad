@@ -1,0 +1,5 @@
+# Node Volume
+      volumes:
+        - name: postgredb
+          hostPath: 
+            path: /data

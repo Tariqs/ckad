@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: init-demo-2
+spec:
+  initContainers:
+  - name: check-env
+    image: busybox
+    env:
+    - name: EXPECTED_VALUE
+      value: "production"
+    - name: CURRENT_VALUE
+      value: "production"
+    command: ['sh', '-c']
+    args:
+    - |
+      echo "Starting value comparison..."
+      echo "Expected value: $EXPECTED_VALUE"
+      echo "Current value: $CURRENT_VALUE"
+
+      if [ "$EXPECTED_VALUE" = "$CURRENT_VALUE" ]; then
+        echo "Values match! Validation successful."
+        echo "Sleeping for 10 seconds..."
+        sleep 10
+        echo "Init container completed successfully!"
+        exit 0
+      else
+        echo "Values do not match! Validation failed."
+        echo "Expected: $EXPECTED_VALUE"
+        echo "Got: $CURRENT_VALUE"
+        exit 1
+      fi
+  - name: check-svc
+    image: curlimages/curl:latest
+    command:
+      - sh
+      - -c
+      - |
+        echo 'Checking main-app Service availability...'
+        until nslookup main-app-svc.default.svc.cluster.local; do
+          echo 'Waiting for Service DNS resolution...'
+          sleep 5
+        done
+        echo 'Service is reachable, proceeding to main-app container!'
+  containers:
+  - name: main-app
+    image: nginx:latest
