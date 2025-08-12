@@ -1,0 +1,12 @@
+# mysql-db.yaml
+apiVersion: mycompany.io/v1
+kind: Database
+metadata:
+  name: my-mysql
+  namespace: production
+spec:
+  engine: mysql
+  version: "8.0"
+  storageSize: "20Gi"
+  replicas: 2
+

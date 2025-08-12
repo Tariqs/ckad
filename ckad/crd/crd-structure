@@ -1,0 +1,27 @@
+Understanding the CRD Structure
+
+1. Metadata Section
+
+	name: Must follow the format <plural>.<group>
+	group: Your organization's domain (avoid conflicts)
+
+2. Spec Section
+
+	group: API group for your resources
+	scope: Namespaced or Cluster
+	names: Different name formats for the resource
+	versions: API versioning support
+
+3. Schema Validation
+
+	openAPIV3Schema: Validates incoming resources
+	required: Mandatory fields
+	enum: Allowed values
+	pattern: Regex validation
+	minimum/maximum: Numeric constraints
+
+4. Status Subresource
+
+	Typically managed by controllers
+	Represents current state
+	Separate from desired state (spec)

@@ -1,0 +1,17 @@
+# This will FAIL - invalid engine
+apiVersion: mycompany.io/v1
+kind: Database
+metadata:
+  name: bad-db
+spec:
+  engine: oracle        # Not in enum list!
+  version: "12c"
+---
+# This will FAIL - missing required field
+apiVersion: mycompany.io/v1
+kind: Database
+metadata:
+  name: incomplete-db
+spec:
+  engine: mysql
+  # Missing required 'version' field!

@@ -1,0 +1,11 @@
+# postgres-db.yaml
+apiVersion: mycompany.io/v1
+kind: Database
+metadata:
+  name: my-postgres
+  namespace: development
+spec:
+  engine: postgresql
+  version: "13.2"
+  storageSize: "15Gi"
+  replicas: 1
