@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: hello-cronjob
+spec:
+  schedule: "*/1 * * * *"  # Cron expression specifying the job to run every 1 minute
+  jobTemplate:
+    spec:
+      backoffLimit: 4 # Number of retries before marking the Job as failed
+      ttlSecondsAfterFinished: 60  # Automatically deletes the Pod 60 seconds after it completes
+      completions: 2
+        # Specifies that 2 successful Pod completions are required for the CronJob's Job to be considered complete.
+        # Each Pod must complete successfully (exit with status 0) for the job to be marked as finished.
+        # In this case, CronJob will wait until both Pods have successfully completed.      
+      parallelism: 2
+        # Specifies that 2 Pods should run concurrently for each execution of the CronJob.
+        # This means that when the CronJob is triggered, both Pods will start simultaneously.
+        # The Pods will run in parallel to perform the task faster, and the CronJob will wait until both have completed.      
+      template:
+        spec:
+          containers:
+            - name: hello
+              image: busybox
+              command: ["bin/sh", "-c", "echo Hello from CronJob! && sleep 10"]
+          restartPolicy: Never  # Ensures Pods don't restart; they must be considered completed or failed based on the task's outcome.
